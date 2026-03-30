@@ -2,24 +2,21 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Interactive Sales Pie Chart</title>
+    <title>Product Quantity Pie Chart</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      // 1. Load the visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
-
-      // 2. Set a callback to run when the Google Visualization API is loaded.
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
         var sheetId = '1wTbu71QFfH_V64We2JW-6Vk-NI8mK2_xBLQBQWS3QmA';
         
-        /* THE FIX: 
-           - 'range=A2:B' skips your header row (Row 1) to avoid the "ONLY_NUMERIC" error.
-           - When using a range, we must refer to columns as Col1 and Col2.
-        */
-        var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?range=A2:B&tq=';
-        var queryString = encodeURIComponent('SELECT A, SUM(B) WHERE B > 0 GROUP BY A');
+        // Use range G2:H to get Product Name (G) and Quantity (H), skipping header
+        var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?range=G2:H&tq=';
+        
+        // Col1 = Product Name, Col2 = Quantity
+        // We sum Col2 and group by Col1 to get the total per product
+        var queryString = encodeURIComponent('SELECT Col1, SUM(Col2) WHERE Col2 > 0 GROUP BY Col1');
 
         var query = new google.visualization.Query(spreadsheetUrl + queryString);
         query.send(handleQueryResponse);
@@ -37,30 +34,26 @@
 
         var data = response.getDataTable();
         
-        // 3. Set chart options
         var options = {
-          title: 'Product Sales Distribution (Q1 2025)',
+          title: 'Quantity Sold per Product (Q1 2025)',
           pieHole: 0.4,
           height: 600,
           width: '100%',
           legend: { position: 'right', alignment: 'center' },
-          tooltip: { trigger: 'focus', showColorCode: true },
+          tooltip: { trigger: 'focus' },
           chartArea: { left: 50, top: 50, width: '90%', height: '80%' }
         };
 
-        // 4. Instantiate and draw our chart, passing in the data and options.
         var chart = new google.visualization.PieChart(container);
         chart.draw(data, options);
       }
     </script>
   </head>
   <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-    
     <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 80%; max-width: 900px;">
       <div id="piechart_div">
-        <p style="text-align: center; color: #666;">Connecting to Google Spreadsheet...</p>
+        <p style="text-align: center; color: #666;">Generating chart from columns G and H...</p>
       </div>
     </div>
-
   </body>
 </html>
