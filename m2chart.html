@@ -38,6 +38,8 @@ function drawChart() {
           pieHole: 0.4,
           height: 600,
           width: '100%',
+          // THE FIX: Anything less than 3% of the total becomes "Other"
+          sliceVisibilityThreshold: 0.03, 
           legend: { position: 'right', alignment: 'center' },
           tooltip: { trigger: 'focus' },
           chartArea: { left: 50, top: 50, width: '90%', height: '80%' }
