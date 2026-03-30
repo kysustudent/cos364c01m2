@@ -19,7 +19,7 @@
            - When using a range, we must refer to columns as Col1 and Col2.
         */
         var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?range=A2:B&tq=';
-        var queryString = encodeURIComponent('SELECT Col1, SUM(Col2) WHERE Col2 > 0 GROUP BY Col1');
+        var queryString = encodeURIComponent('SELECT A, SUM(B) WHERE B > 0 GROUP BY A');
 
         var query = new google.visualization.Query(spreadsheetUrl + queryString);
         query.send(handleQueryResponse);
