@@ -8,19 +8,18 @@
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        var sheetId = '1wTbu71QFfH_V64We2JW-6Vk-NI8mK2_xBLQBQWS3QmA';
-        
-        // Use range G2:H to get Product Name (G) and Quantity (H), skipping header
-        var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?range=G2:H&tq=';
-        
-        // Col1 = Product Name, Col2 = Quantity
-        // We sum Col2 and group by Col1 to get the total per product
-        var queryString = encodeURIComponent('SELECT Col1, SUM(Col2) WHERE Col2 > 0 GROUP BY Col1');
+function drawChart() {
+  var sheetId = '1wTbu71QFfH_V64We2JW-6Vk-NI8mK2_xBLQBQWS3QmA';
+  
+  // We point to the range G2:H (Product and Quantity)
+  var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?range=G2:H&tq=';
+  
+  // THE FIX: Use literal column letters G and H
+  var queryString = encodeURIComponent('SELECT G, SUM(H) WHERE H > 0 GROUP BY G');
 
-        var query = new google.visualization.Query(spreadsheetUrl + queryString);
-        query.send(handleQueryResponse);
-      }
+  var query = new google.visualization.Query(spreadsheetUrl + queryString);
+  query.send(handleQueryResponse);
+}
 
       function handleQueryResponse(response) {
         var container = document.getElementById('piechart_div');
